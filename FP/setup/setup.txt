@@ -1,0 +1,97 @@
+Install mysql
+sudo apt update
+sudo apt upgrade
+sudo apt install mysql-server
+sudo mysql_secure_installation
+
+Install postgres---->Instalar version 12
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install postgresql-12
+
+Install apache
+sudo apt install apache2
+sudo ufw app list
+sudo ufw allow in "Apache"
+Install php
+sudo apt install php libapache2-mod-php php-mysql
+
+Configuring Postgresqk
+copy crudpgsql folder to your web folder
+
+create a user in your Linux OS with passwd
+  sudo useradd bda
+  sudo passwd bda
+
+create postgreSQL role
+  create user bda WITH PASSWORD 'bda_feb_jun_2021';
+
+create database, and table
+  create database bda;
+
+grant privileges to the user
+  grant ALL PRIVILEGES on users to bda;
+
+grant privileges to the tables  
+GRANT USAGE ON FOREIGN SERVER consultoriod TO bda;
+GRANT ALL PRIVILEGES ON TABLE pacientes TO bda;
+ GRANT ALL PRIVILEGES ON TABLE dentistas TO bda;
+ GRANT ALL PRIVILEGES ON TABLE pagos TO bda;
+ GRANT ALL PRIVILEGES ON TABLE pagos_res TO bda;
+ GRANT ALL PRIVILEGES ON TABLE citas TO bda;
+ GRANT ALL PRIVILEGES ON TABLE "citas-MYSQL" TO bda;
+ GRANT ALL PRIVILEGES ON TABLE "citas-PSQL" TO bda;
+ GRANT ALL PRIVILEGES ON TABLE cuentapacientes TO bda;
+ GRANT ALL PRIVILEGES ON TABLE "pacientes-PSQL" TO bda;
+ GRANT ALL PRIVILEGES ON TABLE "pacientes-MYSQL" TO bda;
+ GRANT ALL PRIVILEGES ON TABLE consultorios TO bda;
+ GRANT ALL PRIVILEGES ON TABLE citas TO bda;
+ GRANT ALL PRIVILEGES ON TABLE pacientes TO bda;
+ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO www;
+
+install postgresql extension
+
+  [sudo] apt-get install php-pgsql
+
+  uncomment pgsql and pdo-pgsql extensions in etc/php/$PHP_VERSION/apache2/php.ini file
+
+  extension=pdo_pgsql
+  extension=pgsql
+
+  [sudo] /etc/init.d/apache2 restart
+
+edit pg_hba.conf
+
+  /etc/postgresql/<ver>/main/pg_hba.conf
+
+  SHOW hba_file;
+
+  from
+
+  # TYPE DATABASE USER ADDRESS METHOD
+  local  all      all          peer
+
+  to
+
+  # TYPE DATABASE USER ADDRESS METHOD
+  local  all      all          md5
+
+restart postgresql service
+
+    sudo service postgresql restart
+
+
+
+Install FDW
+sudo apt-get install libmysqlclient-dev
+sudo apt install postgresql-server-dev-12
+
+locate pg_config
+locate mysql_config
+
+git clone https://github.com/EnterpriseDB/mysql_fdw.git
+cd mysql_fdw
+
+export PATH=/usr/lib/postgresql/12/bin/:/usr/bin/:$PATH make USE_PGXS=1
+sudo PATH=/usr/lib/postgresql/12/bin/:/usr/bin/:$PATH make USE_PGXS=1 install
